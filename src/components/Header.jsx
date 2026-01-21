@@ -14,6 +14,28 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // ✅ ONLY for mobile menu: lock background scroll while menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
+  // ✅If user resizes to desktop while menu is open, close it automatically
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)"); // Tailwind md
+    const onChange = (e) => {
+      if (e.matches) setMobileMenuOpen(false);
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   const navItems = [
     "Home",
     "Projects",
@@ -49,8 +71,8 @@ const Header = () => {
       initial="initial"
       animate="animate"
       style={{
-        borderWidth: 0, // Explicitly setting border width to 0
-        borderStyle: "none", // Ensuring no border style
+        borderWidth: 0,
+        borderStyle: "none",
       }}
     >
       <div className="container-custom flex justify-between items-center">
@@ -64,7 +86,7 @@ const Header = () => {
           <span className="font-mono text-lg tracking-wider">SO</span>
         </motion.div>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation  */}
         <nav className="hidden md:block">
           <ul className="flex space-x-8">
             {navItems.map((item, i) => (
@@ -86,11 +108,11 @@ const Header = () => {
           </ul>
         </nav>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Button  */}
         <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="md:hidden text-light p-1"
+          className="md:hidden text-light p-1 relative z-[1001]"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <div className="w-6 flex flex-col space-y-1.5">
@@ -115,34 +137,49 @@ const Header = () => {
           </div>
         </motion.button>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu  */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="absolute top-full left-0 w-full bg-secondary py-4 px-6 glassmorphism-no-border md:hidden"
-              style={{ borderWidth: 0 }}
+              className="fixed inset-0 z-[1000] md:hidden"
             >
-              <ul className="flex flex-col space-y-4">
-                {navItems.map((item) => (
-                  <motion.li
-                    key={item}
-                    whileHover={{ x: 5 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <a
-                      href={`#${item.toLowerCase()}`}
-                      className="text-sm font-medium"
-                      onClick={() => setMobileMenuOpen(false)}
+              {/* Backdrop */}
+              <div
+                className="absolute inset-0 bg-black/70"
+                onClick={() => setMobileMenuOpen(false)}
+              />
+
+              {/*  menu styling */}
+              <motion.div
+                initial={{ y: -20 }}
+                animate={{ y: 0 }}
+                exit={{ y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="absolute top-0 left-0 w-full bg-secondary py-4 px-6 glassmorphism-no-border"
+                style={{ borderWidth: 0 }}
+              >
+                <ul className="flex flex-col space-y-4 pt-16">
+                  {navItems.map((item) => (
+                    <motion.li
+                      key={item}
+                      whileHover={{ x: 5 }}
+                      transition={{ duration: 0.2 }}
                     >
-                      {item}
-                    </a>
-                  </motion.li>
-                ))}
-              </ul>
+                      <a
+                        href={`#${item.toLowerCase()}`}
+                        className="text-sm font-medium"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item}
+                      </a>
+                    </motion.li>
+                  ))}
+                </ul>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
