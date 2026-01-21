@@ -149,7 +149,7 @@ const Header = () => {
             >
               {/* Backdrop */}
               <div
-                className="absolute inset-0 bg-black/70"
+                className="absolute inset-0 bg-secondary opacity-80"
                 onClick={() => setMobileMenuOpen(false)}
               />
 
