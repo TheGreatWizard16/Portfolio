@@ -14,7 +14,7 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ✅ ONLY for mobile menu: lock background scroll while menu is open
+  //  ONLY for mobile menu: lock background scroll while menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -26,7 +26,7 @@ const Header = () => {
     };
   }, [mobileMenuOpen]);
 
-  // ✅If user resizes to desktop while menu is open, close it automatically
+  // If user resizes to desktop while menu is open, close it automatically
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)"); // Tailwind md
     const onChange = (e) => {
@@ -64,7 +64,7 @@ const Header = () => {
 
   return (
     <motion.header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-0 ${
+      className={`fixed top-0 left-0 right-0 z-[1001] transition-all duration-300 border-0 ${
         scrolled ? "glassmorphism-no-border py-3" : "bg-transparent py-6"
       }`}
       variants={headerVariants}
@@ -146,10 +146,11 @@ const Header = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
               className="fixed inset-0 z-[1000] md:hidden"
+              style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
             >
               {/* Backdrop */}
               <div
-                className="absolute inset-0 bg-secondary opacity-80"
+                className="absolute inset-0 bg-secondary/80"
                 onClick={() => setMobileMenuOpen(false)}
               />
 
