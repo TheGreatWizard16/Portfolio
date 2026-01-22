@@ -108,40 +108,40 @@ const Header = () => {
               ))}
             </ul>
           </nav>
-
-          {/* Mobile Menu Button  */}
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="md:hidden text-light p-1 fixed top-6 right-6 z-[2000]"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            <div className="relative w-6 h-6">
-              <motion.div
-                className="absolute left-0 top-1/2 w-full h-px bg-light"
-                style={{ transformOrigin: "center" }}
-                animate={
-                  mobileMenuOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -6 }
-                }
-                transition={{ duration: 0.25 }}
-              />
-              <motion.div
-                className="absolute left-0 top-1/2 w-full h-px bg-light"
-                animate={mobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
-                transition={{ duration: 0.2 }}
-              />
-              <motion.div
-                className="absolute left-0 top-1/2 w-full h-px bg-light"
-                style={{ transformOrigin: "center" }}
-                animate={
-                  mobileMenuOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 6 }
-                }
-                transition={{ duration: 0.25 }}
-              />
-            </div>
-          </motion.button>
         </div>
       </motion.header>
+
+      {/* Mobile Menu Button (moved OUTSIDE header so it stays above overlay) */}
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="md:hidden text-light p-1 fixed top-6 right-6 z-[3000]"
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+      >
+        <div className="relative w-6 h-6">
+          <motion.div
+            className="absolute left-0 top-1/2 w-full h-px bg-light"
+            style={{ transformOrigin: "center" }}
+            animate={
+              mobileMenuOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -6 }
+            }
+            transition={{ duration: 0.25 }}
+          />
+          <motion.div
+            className="absolute left-0 top-1/2 w-full h-px bg-light"
+            animate={mobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+            transition={{ duration: 0.2 }}
+          />
+          <motion.div
+            className="absolute left-0 top-1/2 w-full h-px bg-light"
+            style={{ transformOrigin: "center" }}
+            animate={
+              mobileMenuOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 6 }
+            }
+            transition={{ duration: 0.25 }}
+          />
+        </div>
+      </motion.button>
 
       {/* Mobile Menu - Outside header */}
       <AnimatePresence>
